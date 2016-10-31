@@ -17,7 +17,6 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package org.adtpro.utilities;
 
 import java.io.FileNotFoundException;
@@ -27,111 +26,107 @@ import java.text.DateFormat;
 import java.util.Date;
 import org.adtpro.resources.Messages;
 
-public class Log
-{
-  private static Log _theSingleton = null;
+public class Log {
 
-  private static String _traceFileName = Messages.getString("TraceFileName");
+    private static Log _theSingleton = null;
 
-  private static boolean _trace = false;
+    private static String _traceFileName = Messages.getString("TraceFileName");
 
-  private static PrintStream _out = null;
+    private static boolean _trace = false;
 
-  /**
-   * 
-   * Private constructor - use the <code>getSingleton</code> to instantiate.
-   * 
-   */
-  private Log()
-  {
-    _out = System.out;
-  }
+    private static PrintStream _out = null;
 
-  public static void printStackTrace(Throwable e)
-  {
-    e.printStackTrace();
-    if (_trace) e.printStackTrace(_out);
-  }
-
-  public static void println(boolean console, String logString)
-  {
-    if (console) System.out.println(logString);
-    if (_trace)
-    {
-      DateFormat longTimestamp = 
-        DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
-      if ((logString != null) && (logString.length() > 0))
-      {
-        _out.print(longTimestamp.format(new Date())+" ");
-        _out.println(logString);
-      }
-      else
-        _out.println();
-    }
-  }
-
-  public static void print(boolean console, String logString)
-  {
-    if (console) System.out.print(logString);
-    if (_trace) _out.print(logString);
-  }
-
-  /**
-   * Retrieve the single instance of this class.
-   * 
-   * @return Log
-   */
-  public static Log getSingleton()
-  {
-    if (null == _theSingleton)
-      Log.allocateSingleton();
-    return _theSingleton;
-  }
-
-  public void setTrace(boolean trace)
-  {
-    _trace = trace;
-    if (trace == true) // Trace turned on
-    {
-      if (_traceFileName != null)
-      {
-        try
-        {
-          _out.flush();
-          _out = new PrintStream(new FileOutputStream(_traceFileName));
-        }
-        catch (FileNotFoundException io)
-        {
-          io.printStackTrace();
-          _out = System.out;
-        }
-      }
-    }
-    else // Trace turned off
-    {
-      if (_out.getClass() == PrintStream.class)
-      {
-        _out.flush();
-        _out.close();
+    /**
+     *
+     * Private constructor - use the <code>getSingleton</code> to instantiate.
+     *
+     */
+    private Log() {
         _out = System.out;
-      }
     }
-  }
 
-  public void setTraceFile(String filename)
-  {
-    _traceFileName = filename;
-  }
+    public static void printStackTrace(Throwable e) {
+        e.printStackTrace();
+        if (_trace) {
+            e.printStackTrace(_out);
+        }
+    }
 
-  /**
-   * getSingleton() is not synchronized, so we must check in this method to make
-   * sure a concurrent getSingleton() didn't already allocate the Singleton
-   * 
-   * synchronized on a static method locks the class
-   */
-  private synchronized static void allocateSingleton()
-  {
-    if (null == _theSingleton) _theSingleton = new Log();
-  }
+    public static void println(boolean console, String logString) {
+        if (console) {
+            System.out.println(logString);
+        }
+        if (_trace) {
+            DateFormat longTimestamp
+                    = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
+            if ((logString != null) && (logString.length() > 0)) {
+                _out.print(longTimestamp.format(new Date()) + " ");
+                _out.println(logString);
+            } else {
+                _out.println();
+            }
+        }
+    }
+
+    public static void print(boolean console, String logString) {
+        if (console) {
+            System.out.print(logString);
+        }
+        if (_trace) {
+            _out.print(logString);
+        }
+    }
+
+    /**
+     * Retrieve the single instance of this class.
+     *
+     * @return Log
+     */
+    public static Log getSingleton() {
+        if (null == _theSingleton) {
+            Log.allocateSingleton();
+        }
+        return _theSingleton;
+    }
+
+    public void setTrace(boolean trace) {
+        _trace = trace;
+        if (trace == true) // Trace turned on
+        {
+            if (_traceFileName != null) {
+                try {
+                    _out.flush();
+                    _out = new PrintStream(new FileOutputStream(_traceFileName));
+                } catch (FileNotFoundException io) {
+                    io.printStackTrace();
+                    _out = System.out;
+                }
+            }
+        } else // Trace turned off
+        {
+            if (_out.getClass() == PrintStream.class) {
+                _out.flush();
+                _out.close();
+                _out = System.out;
+            }
+        }
+    }
+
+    public void setTraceFile(String filename) {
+        _traceFileName = filename;
+    }
+
+    /**
+     * getSingleton() is not synchronized, so we must check in this method to
+     * make sure a concurrent getSingleton() didn't already allocate the
+     * Singleton
+     *
+     * synchronized on a static method locks the class
+     */
+    private synchronized static void allocateSingleton() {
+        if (null == _theSingleton) {
+            _theSingleton = new Log();
+        }
+    }
 
 }

@@ -17,7 +17,6 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package org.adtpro.utilities;
 
 import java.io.IOException;
@@ -26,19 +25,17 @@ import java.io.OutputStream;
 
 /**
  * Common stream-handling routines.
- * 
+ *
  * @author Rob Greene
  */
-public class StreamUtil
-{
-  public static void copy(InputStream inputStream, OutputStream outputStream) throws IOException
-  {
-    byte[] data = new byte[1024];
-    int bytes;
-    while ((bytes = inputStream.read(data)) > 0)
-    {
-      outputStream.write(data, 0, bytes);
+public class StreamUtil {
+
+    public static void copy(InputStream inputStream, OutputStream outputStream) throws IOException {
+        byte[] data = new byte[1024];
+        int bytes;
+        while ((bytes = inputStream.read(data)) > 0) {
+            outputStream.write(data, 0, bytes);
+        }
+        inputStream.close();
     }
-    inputStream.close();
-  }
 }

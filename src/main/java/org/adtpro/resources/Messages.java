@@ -17,31 +17,26 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package org.adtpro.resources;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Messages
-{
-  private static final String BUNDLE_NAME = "org.adtpro.resources.messages"; //$NON-NLS-1$
+public class Messages {
 
-  private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+    private static final String BUNDLE_NAME = "org.adtpro.resources.messages"; //$NON-NLS-1$
 
-  private Messages()
-  {}
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
-  public static String getString(String key)
-  {
-    // TODO Auto-generated method stub
-    try
-    {
-      return RESOURCE_BUNDLE.getString(key);
+    private Messages() {
     }
-    catch (MissingResourceException e)
-    {
-      return '!' + key + '!';
+
+    public static String getString(String key) {
+        // TODO Auto-generated method stub
+        try {
+            return RESOURCE_BUNDLE.getString(key);
+        } catch (MissingResourceException e) {
+            return '!' + key + '!';
+        }
     }
-  }
 }

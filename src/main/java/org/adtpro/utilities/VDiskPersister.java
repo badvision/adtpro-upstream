@@ -48,7 +48,7 @@ public class VDiskPersister {
             } catch (IOException e1) {
                 Log.println(false, "Unable to find Virtual.po in current working directory; creating a new one.");
                 try {
-                    
+
                     com.webcodepro.applecommander.ui.ac.createProDisk(_parent.getWorkingDirectory() + "Virtual.po", "VIRTUAL", Disk.APPLE_800KB_DISK);
                     _disk1 = new Disk(_parent.getWorkingDirectory() + "Virtual.po");
                 } catch (IOException e) {

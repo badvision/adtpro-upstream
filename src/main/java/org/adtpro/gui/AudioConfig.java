@@ -17,7 +17,6 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package org.adtpro.gui;
 
 import java.awt.BorderLayout;
@@ -39,206 +38,189 @@ import org.adtpro.resources.Messages;
 import org.adtpro.utilities.Log;
 import org.adtpro.ADTProperties;
 
-public class AudioConfig extends JDialog implements ActionListener
-{
-  /**
-   * 
-   */
-  private static AudioConfig _theSingleton = null;
+public class AudioConfig extends JDialog implements ActionListener {
 
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static AudioConfig _theSingleton = null;
 
-  private JLabel labelAudioDevice;
+    private static final long serialVersionUID = 1L;
 
-  private JComboBox comboAudioDevice;
-  
-  private int exitStatus = CANCEL;
+    private JLabel labelAudioDevice;
 
-  int _audioDeviceIndices[];
+    private JComboBox comboAudioDevice;
 
-  public JButton okButton = new JButton(Messages.getString("Gui.Ok"));
-  public JButton cancelButton = new JButton(Messages.getString("Gui.Cancel"));
+    private int exitStatus = CANCEL;
 
-  private static org.adtpro.ADTProperties _properties = null;
+    int _audioDeviceIndices[];
 
-  public static Gui _parent;
+    public JButton okButton = new JButton(Messages.getString("Gui.Ok"));
+    public JButton cancelButton = new JButton(Messages.getString("Gui.Cancel"));
 
-  public static final int CANCEL = 0, OK = 1;
+    private static org.adtpro.ADTProperties _properties = null;
 
-  /**
-   * 
-   * Private constructor - use the <code>getSingleton</code> to instantiate.
-   * 
-   */
-  private AudioConfig(ADTProperties properties)
-  {
-    _properties = properties;
-    this.setTitle(Messages.getString("Gui.AudioConfig"));
-    JPanel buttonPanel = new JPanel(new GridBagLayout());
-    okButton.addActionListener(this);
-    cancelButton.addActionListener(this);
+    public static Gui _parent;
 
-    GridBagUtil.constrain(buttonPanel, okButton, 1, 1, // X, Y Coordinates
-        1, 1, // Grid width, height
-        GridBagConstraints.NONE, // Fill value
-        GridBagConstraints.WEST, // Anchor value
-        0.0, 0.0, // Weight X, Y
-        5, 5, 5, 5); // Top, left, bottom, right insets
-    GridBagUtil.constrain(buttonPanel, cancelButton, 2, 1, // X, Y Coordinates
-        1, 1, // Grid width, height
-        GridBagConstraints.NONE, // Fill value
-        GridBagConstraints.WEST, // Anchor value
-        0.0, 0.0, // Weight X, Y
-        5, 5, 5, 5); // Top, left, bottom, right insets
-    JPanel configPanel = new JPanel();
-    configPanel.setLayout(new GridBagLayout());
-    this.getContentPane().setLayout(new BorderLayout());    
-    this.getContentPane().add(configPanel,BorderLayout.NORTH);
-    this.getContentPane().add(buttonPanel,BorderLayout.SOUTH);
-    Log.getSingleton();
-    comboAudioDevice = new JComboBox();
-    comboAudioDevice.addItem(Messages.getString("Gui.DefaultAudioMixer"));
-    Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
-    //AudioFormat audioFormat = CaptureThread.getAudioFormat();
-    String nextName = null;
-    _audioDeviceIndices = new int[mixerInfo.length + 1];
-    _audioDeviceIndices[0] = 0;
-    int j = 1;
-    for (int i = 0; i < mixerInfo.length; i++)
-    {
-      nextName = null;
-      //DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
-      //Mixer mixer = AudioSystem.getMixer(mixerInfo[i]);
-      try
-      {
-        //TargetDataLine targetDataLine = (TargetDataLine) mixer.getLine(dataLineInfo);
-        nextName = mixerInfo[i].getName();
-        if (!nextName.equals("")) /* Skip it if it's name is blank... */
-        {
-          comboAudioDevice.addItem(nextName);
-          _audioDeviceIndices[j] = i;
-          Log.println(false, "AudioConfig().ctor Added device "+nextName+" at index "+i+", mixer index "+j+".");
-          j = j + 1;
-        }
-      }
-      catch (Exception e)
-      {
-        /* Don't need to see stack traces for bad lines/mixers... */
-        /*
+    public static final int CANCEL = 0, OK = 1;
+
+    /**
+     *
+     * Private constructor - use the <code>getSingleton</code> to instantiate.
+     *
+     */
+    private AudioConfig(ADTProperties properties) {
+        _properties = properties;
+        this.setTitle(Messages.getString("Gui.AudioConfig"));
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        okButton.addActionListener(this);
+        cancelButton.addActionListener(this);
+
+        GridBagUtil.constrain(buttonPanel, okButton, 1, 1, // X, Y Coordinates
+                1, 1, // Grid width, height
+                GridBagConstraints.NONE, // Fill value
+                GridBagConstraints.WEST, // Anchor value
+                0.0, 0.0, // Weight X, Y
+                5, 5, 5, 5); // Top, left, bottom, right insets
+        GridBagUtil.constrain(buttonPanel, cancelButton, 2, 1, // X, Y Coordinates
+                1, 1, // Grid width, height
+                GridBagConstraints.NONE, // Fill value
+                GridBagConstraints.WEST, // Anchor value
+                0.0, 0.0, // Weight X, Y
+                5, 5, 5, 5); // Top, left, bottom, right insets
+        JPanel configPanel = new JPanel();
+        configPanel.setLayout(new GridBagLayout());
+        this.getContentPane().setLayout(new BorderLayout());
+        this.getContentPane().add(configPanel, BorderLayout.NORTH);
+        this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        Log.getSingleton();
+        comboAudioDevice = new JComboBox();
+        comboAudioDevice.addItem(Messages.getString("Gui.DefaultAudioMixer"));
+        Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
+        //AudioFormat audioFormat = CaptureThread.getAudioFormat();
+        String nextName = null;
+        _audioDeviceIndices = new int[mixerInfo.length + 1];
+        _audioDeviceIndices[0] = 0;
+        int j = 1;
+        for (int i = 0; i < mixerInfo.length; i++) {
+            nextName = null;
+            //DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+            //Mixer mixer = AudioSystem.getMixer(mixerInfo[i]);
+            try {
+                //TargetDataLine targetDataLine = (TargetDataLine) mixer.getLine(dataLineInfo);
+                nextName = mixerInfo[i].getName();
+                if (!nextName.equals("")) /* Skip it if it's name is blank... */ {
+                    comboAudioDevice.addItem(nextName);
+                    _audioDeviceIndices[j] = i;
+                    Log.println(false, "AudioConfig().ctor Added device " + nextName + " at index " + i + ", mixer index " + j + ".");
+                    j = j + 1;
+                }
+            } catch (Exception e) {
+                /* Don't need to see stack traces for bad lines/mixers... */
+ /*
         Log.println(true,"AudioConfig() ctor Encountered error on mixer "+mixerInfo[i].getName()+":");
         Log.printStackTrace(e);
-        */
-      }
-    }
-/*
+                 */
+            }
+        }
+        /*
     Log.println(true, Messages.getString("Gui.NoAudio")); //$NON-NLS-1$
     Log.println(false, "AudioConfig Constructor could not instantiate the rxtx library.");
-*/
-    labelAudioDevice = new JLabel(Messages.getString("Gui.AudioConfigMixer"), SwingConstants.LEFT); //$NON-NLS-1$
+         */
+        labelAudioDevice = new JLabel(Messages.getString("Gui.AudioConfigMixer"), SwingConstants.LEFT); //$NON-NLS-1$
 
-    GridBagUtil.constrain(configPanel, labelAudioDevice, 1, 1, // X, Y Coordinates
-        1, 1, // Grid width, height
-        GridBagConstraints.NONE, // Fill value
-        GridBagConstraints.WEST, // Anchor value
-        0.0, 0.0, // Weight X, Y
-        5, 5, 0, 0); // Top, left, bottom, right insets
-    GridBagUtil.constrain(configPanel, comboAudioDevice, 1, 2, // X, Y Coordinates
-        1, 1, // Grid width, height
-        GridBagConstraints.HORIZONTAL, // Fill value
-        GridBagConstraints.WEST, // Anchor value
-        0.0, 0.0, // Weight X, Y
-        0, 5, 5, 5); // Top, left, bottom, right insets
+        GridBagUtil.constrain(configPanel, labelAudioDevice, 1, 1, // X, Y Coordinates
+                1, 1, // Grid width, height
+                GridBagConstraints.NONE, // Fill value
+                GridBagConstraints.WEST, // Anchor value
+                0.0, 0.0, // Weight X, Y
+                5, 5, 0, 0); // Top, left, bottom, right insets
+        GridBagUtil.constrain(configPanel, comboAudioDevice, 1, 2, // X, Y Coordinates
+                1, 1, // Grid width, height
+                GridBagConstraints.HORIZONTAL, // Fill value
+                GridBagConstraints.WEST, // Anchor value
+                0.0, 0.0, // Weight X, Y
+                0, 5, 5, 5); // Top, left, bottom, right insets
 
-    this.pack();
-    this.setBounds(FrameUtils.center(this.getSize()));
-    okButton.requestFocus();
-    getRootPane().setDefaultButton(okButton);
-    int mixerIndex = 0;
-    try
-    {
-      mixerIndex = Integer.parseInt(_properties.getProperty("AudioPortIndex","0"));
-      Log.println(false, "AudioConfig.ctor() Found a GUI mixer index of: "+mixerIndex);
-      Log.println(false, "  which is a hardware index of: "+_audioDeviceIndices[mixerIndex]);
+        this.pack();
+        this.setBounds(FrameUtils.center(this.getSize()));
+        okButton.requestFocus();
+        getRootPane().setDefaultButton(okButton);
+        int mixerIndex = 0;
+        try {
+            mixerIndex = Integer.parseInt(_properties.getProperty("AudioPortIndex", "0"));
+            Log.println(false, "AudioConfig.ctor() Found a GUI mixer index of: " + mixerIndex);
+            Log.println(false, "  which is a hardware index of: " + _audioDeviceIndices[mixerIndex]);
+        } catch (NumberFormatException e) {
+            /* Leaves mixerIndex at zero */
+        }
+        comboAudioDevice.setSelectedIndex(mixerIndex);
+        Log.println(false, "AudioConfig Constructor exit.");
     }
-    catch (NumberFormatException e)
-    {
-      /* Leaves mixerIndex at zero */
+
+    /**
+     * Retrieve the single instance of this class.
+     *
+     * @return Log
+     */
+    public static AudioConfig getSingleton(Gui parent, ADTProperties properties) {
+        _parent = parent;
+        _properties = properties;
+        if (null == _theSingleton) {
+            AudioConfig.allocateSingleton(parent, properties);
+        }
+        return _theSingleton;
     }
-    comboAudioDevice.setSelectedIndex(mixerIndex);
-    Log.println(false,"AudioConfig Constructor exit.");
-  }
 
-  /**
-   * Retrieve the single instance of this class.
-   * 
-   * @return Log
-   */
-  public static AudioConfig getSingleton(Gui parent, ADTProperties properties)
-  {
-    _parent = parent;
-    _properties = properties;
-    if (null == _theSingleton)
-      AudioConfig.allocateSingleton(parent, properties);
-    return _theSingleton;
-  }
-
-  /**
-   * getSingleton() is not synchronized, so we must check in this method to make
-   * sure a concurrent getSingleton() didn't already allocate the Singleton
-   * 
-   * synchronized on a static method locks the class
-   */
-  private synchronized static void allocateSingleton(Gui parent, ADTProperties properties)
-  {
-    if (null == _theSingleton) _theSingleton = new AudioConfig(properties);
-  }
-
-  public static String getPort()
-  {
-    return (String)_theSingleton.comboAudioDevice.getSelectedItem();
-  }
-
-  public static void showSingleton(Gui parent)
-  {
-    _theSingleton.setModal(true);
-    _theSingleton.setBounds(FrameUtils.center(_theSingleton.getSize(),parent.getBounds()));
-    _theSingleton.setVisible(true);
-  }
-
-  public void actionPerformed(ActionEvent e)
-  {
-    Log.println(false,"AudioConfig.actionPerformed() entry, responding to "+e.getActionCommand());
-    if (e.getSource() == okButton)
-    {
-      Log.println(false, "  Selected index: "+(comboAudioDevice.getSelectedIndex()));
-      if (comboAudioDevice.getSelectedIndex() > -1)
-      {
-        _properties.setProperty("AudioPortIndex", Integer.toString(comboAudioDevice.getSelectedIndex()));
-        _properties.setProperty("AudioHardwareIndex", Integer.toString(_audioDeviceIndices[comboAudioDevice.getSelectedIndex()]));
-
-        Log.println(false, "  Set property to: "+Integer.toString(comboAudioDevice.getSelectedIndex()));
-      }
-      else
-      {
-        _properties.setProperty("AudioPortIndex", "0");
-        Log.println(false, "  Oops, set property to 0.");
-      }
-      _properties.save();
-      _theSingleton.exitStatus = OK;
-      this.setVisible(false);
+    /**
+     * getSingleton() is not synchronized, so we must check in this method to
+     * make sure a concurrent getSingleton() didn't already allocate the
+     * Singleton
+     *
+     * synchronized on a static method locks the class
+     */
+    private synchronized static void allocateSingleton(Gui parent, ADTProperties properties) {
+        if (null == _theSingleton) {
+            _theSingleton = new AudioConfig(properties);
+        }
     }
-    else if (e.getSource() == cancelButton)
-    {
-      int priorSelection = Integer.parseInt(_properties.getProperty("AudioPortIndex", "0"));
-      _theSingleton.comboAudioDevice.setSelectedIndex(priorSelection); //$NON-NLS-1$ //$NON-NLS-2$
-      _theSingleton.exitStatus = CANCEL;
-      this.setVisible(false);
-    }
-    Log.println(false,"AudioConfig.actionPerformed() exit.");
-  }
 
-  public int getExitStatus()
-  {
-    return _theSingleton.exitStatus;
-  }
+    public static String getPort() {
+        return (String) _theSingleton.comboAudioDevice.getSelectedItem();
+    }
+
+    public static void showSingleton(Gui parent) {
+        _theSingleton.setModal(true);
+        _theSingleton.setBounds(FrameUtils.center(_theSingleton.getSize(), parent.getBounds()));
+        _theSingleton.setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        Log.println(false, "AudioConfig.actionPerformed() entry, responding to " + e.getActionCommand());
+        if (e.getSource() == okButton) {
+            Log.println(false, "  Selected index: " + (comboAudioDevice.getSelectedIndex()));
+            if (comboAudioDevice.getSelectedIndex() > -1) {
+                _properties.setProperty("AudioPortIndex", Integer.toString(comboAudioDevice.getSelectedIndex()));
+                _properties.setProperty("AudioHardwareIndex", Integer.toString(_audioDeviceIndices[comboAudioDevice.getSelectedIndex()]));
+
+                Log.println(false, "  Set property to: " + Integer.toString(comboAudioDevice.getSelectedIndex()));
+            } else {
+                _properties.setProperty("AudioPortIndex", "0");
+                Log.println(false, "  Oops, set property to 0.");
+            }
+            _properties.save();
+            _theSingleton.exitStatus = OK;
+            this.setVisible(false);
+        } else if (e.getSource() == cancelButton) {
+            int priorSelection = Integer.parseInt(_properties.getProperty("AudioPortIndex", "0"));
+            _theSingleton.comboAudioDevice.setSelectedIndex(priorSelection); //$NON-NLS-1$ //$NON-NLS-2$
+            _theSingleton.exitStatus = CANCEL;
+            this.setVisible(false);
+        }
+        Log.println(false, "AudioConfig.actionPerformed() exit.");
+    }
+
+    public int getExitStatus() {
+        return _theSingleton.exitStatus;
+    }
 }

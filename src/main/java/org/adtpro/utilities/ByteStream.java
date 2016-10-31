@@ -20,47 +20,41 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package org.adtpro.utilities;
 
-public class ByteStream
-{
-byte[] _buffer;
-int _cursor = 0;
+public class ByteStream {
 
-	public ByteStream(byte[] buffer)
-	{
-		_cursor = 0;
-		_buffer = buffer;
-	}
+    byte[] _buffer;
+    int _cursor = 0;
 
-	public void writeBytes(String str)
-	{
-		writeBytes(str.getBytes());
-	}
+    public ByteStream(byte[] buffer) {
+        _cursor = 0;
+        _buffer = buffer;
+    }
 
-	public void writeBytes(byte data[])
-	{
-		int i;
-		for (i = 0; i < data.length; i++)
-	          _buffer[_cursor + i] = data[i];
-		_cursor += i;
-	}
+    public void writeBytes(String str) {
+        writeBytes(str.getBytes());
+    }
 
-	public void writeByte(char datum)
-	{
-		byte data[] = { (byte) (datum) };
-		writeBytes(data);
-	}
+    public void writeBytes(byte data[]) {
+        int i;
+        for (i = 0; i < data.length; i++) {
+            _buffer[_cursor + i] = data[i];
+        }
+        _cursor += i;
+    }
 
-	public void writeByte(byte datum)
-	{
-		byte data[] = { datum };
-	    writeBytes(data);
-	}
+    public void writeByte(char datum) {
+        byte data[] = {(byte) (datum)};
+        writeBytes(data);
+    }
 
-	public byte[] getBuffer()
-	{
-		return _buffer;
-	}
+    public void writeByte(byte datum) {
+        byte data[] = {datum};
+        writeBytes(data);
+    }
+
+    public byte[] getBuffer() {
+        return _buffer;
+    }
 }

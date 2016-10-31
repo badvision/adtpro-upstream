@@ -17,25 +17,24 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package org.adtpro;
 
 import org.adtpro.gui.Gui;
 import org.adtpro.resources.Messages;
 import org.adtpro.utilities.Log;
 
-/** The main class for launching the ADTPro client graphical user interface.
+/**
+ * The main class for launching the ADTPro client graphical user interface.
+ *
  * @author File Created By: David Schmidt &lt;david@attglobal.net&gt;
  */
-public class ADTPro
-{
+public class ADTPro {
 
-  public static void main(java.lang.String[] args)
-  {
-    Log.getSingleton();
-    Log.print(true,Messages.getString("Gui.Title")); //$NON-NLS-1$
-    Log.println(true," " + Messages.getString("Version.Number")); //$NON-NLS-1$
-    Log.println(true,""); //$NON-NLS-1$
-    new Gui(args);
-  }
+    public static void main(java.lang.String[] args) {
+        Log.getSingleton();
+        Log.print(true, Messages.getString("Gui.Title")); //$NON-NLS-1$
+        Log.println(true, " " + Messages.getString("Version.Number")); //$NON-NLS-1$
+        Log.println(true, ""); //$NON-NLS-1$
+        new Gui(args);
+    }
 }

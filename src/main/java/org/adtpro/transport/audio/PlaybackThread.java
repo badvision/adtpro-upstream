@@ -17,7 +17,6 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package org.adtpro.transport.audio;
 
 import javax.sound.sampled.AudioFormat;
@@ -29,52 +28,47 @@ import org.adtpro.gui.Gui;
 import org.adtpro.resources.Messages;
 import org.adtpro.utilities.Log;
 
-public class PlaybackThread extends Thread
-{
-  byte[] _audioData;
+public class PlaybackThread extends Thread {
 
-  Gui _parent = null;
+    byte[] _audioData;
 
-  boolean _shouldRun = true;
+    Gui _parent = null;
 
-  public PlaybackThread(byte[] audioData, Gui parent)
-  {
-    _audioData = audioData;
-    _parent = parent;
-  }
+    boolean _shouldRun = true;
 
-  public PlaybackThread(byte[] audioData)
-  {
-    _audioData = audioData;
-  }
+    public PlaybackThread(byte[] audioData, Gui parent) {
+        _audioData = audioData;
+        _parent = parent;
+    }
 
-  public void run()
-  {
-    play();
-  }
+    public PlaybackThread(byte[] audioData) {
+        _audioData = audioData;
+    }
 
-  public void requestStop()
-  {
-    _shouldRun = false;
-  }
+    public void run() {
+        play();
+    }
 
-  public void play()
-  {
-    long startTime;
-	long endTime;
-    long diffMillis = 0;
-    Log.println(false, "PlaybackThread.play() entry.");
-    startTime = System.currentTimeMillis();
-    /*
+    public void requestStop() {
+        _shouldRun = false;
+    }
+
+    public void play() {
+        long startTime;
+        long endTime;
+        long diffMillis = 0;
+        Log.println(false, "PlaybackThread.play() entry.");
+        startTime = System.currentTimeMillis();
+        /*
      * From the AudioInputStream, i.e. from the sound file, we fetch information
      * about the format of the audio data. These information include the
      * sampling frequency, the number of channels and the size of the samples.
      * These information are needed to ask Java Sound for a suitable output line
      * for this audio file.
-     */
-    AudioFormat audioFormat = new AudioFormat(44100, 8, 1, false, true);
+         */
+        AudioFormat audioFormat = new AudioFormat(44100, 8, 1, false, true);
 
-    /*
+        /*
      * Asking for a line is a rather tricky thing. We have to construct an Info
      * object that specifies the desired properties for the line. First, we have
      * to say which kind of line we want. The possibilities are: SourceDataLine
@@ -85,101 +79,87 @@ public class PlaybackThread extends Thread
      * can give Java Sound a hint about how big the internal buffer for the line
      * should be. This isn't used here, signaling that we don't care about the
      * exact size. Java Sound will use some default value for the buffer size.
-     */
-    SourceDataLine line = null;
-    SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-    try
-    {
-      line = (SourceDataLine) AudioSystem.getLine(info);
-      /*
+         */
+        SourceDataLine line = null;
+        SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+        try {
+            line = (SourceDataLine) AudioSystem.getLine(info);
+            /*
        * The line is there, but it is not yet ready to receive audio data. We
        * have to open the line.
-       */
-      line.open(audioFormat);
-      line.start();
-    }
-    catch (Exception e)
-    {
-      Log.printStackTrace(e);
-    }
-    /*
+             */
+            line.open(audioFormat);
+            line.start();
+        } catch (Exception e) {
+            Log.printStackTrace(e);
+        }
+        /*
      * Ok, finally the line is prepared. Now comes the real job: we have to
      * write data to the line. We do this in a loop. First, we read data from
      * the AudioInputStream to a buffer. Then, we write from this buffer to the
      * Line. This is done until the end of the file is reached, which is
      * detected by a return value of -1 from the read method of the
      * AudioInputStream.
-     */
-    Log.println(false, "PlaybackThread.play() payload size: " + _audioData.length);
-    if (_parent != null) _parent.setProgressMaximum(_audioData.length);
-    int i, nBytesWritten = 0;
-    int chunk = _audioData.length / 100;
-    Log.print(false, "PlaybackThread.play() Bytes written:");
-    for (i = 0; i < 100; i++)
-    {
-      if (_shouldRun)
-      {
-        nBytesWritten += line.write(_audioData, i * chunk, chunk);
-        if (i % 25 == 0)
-        {
-          // Only write one in 4 for this...
-          Log.print(false, " " + nBytesWritten);
+         */
+        Log.println(false, "PlaybackThread.play() payload size: " + _audioData.length);
+        if (_parent != null) {
+            _parent.setProgressMaximum(_audioData.length);
         }
-        if ((_parent != null) && (_shouldRun))
-        {
-          _parent.setProgressValue(nBytesWritten);
+        int i, nBytesWritten = 0;
+        int chunk = _audioData.length / 100;
+        Log.print(false, "PlaybackThread.play() Bytes written:");
+        for (i = 0; i < 100; i++) {
+            if (_shouldRun) {
+                nBytesWritten += line.write(_audioData, i * chunk, chunk);
+                if (i % 25 == 0) {
+                    // Only write one in 4 for this...
+                    Log.print(false, " " + nBytesWritten);
+                }
+                if ((_parent != null) && (_shouldRun)) {
+                    _parent.setProgressValue(nBytesWritten);
+                }
+            }
         }
-      }
-    }
-    Log.println(false, "");
-    /*
+        Log.println(false, "");
+        /*
      * Wait until all data are played. This is only necessary because of the bug
      * noted below. (If we do not wait, we would interrupt the playback by
      * prematurely closing the line and exiting the VM.)
      * 
      * Thanks to Margie Fitch for bringing me on the right path to this
      * solution.
-     */
-    if (_shouldRun)
-    {
-      line.drain();
-      try
-      {
-        /*
+         */
+        if (_shouldRun) {
+            line.drain();
+            try {
+                /*
          *  There always seems to be some sound playing even when Java thinks it's done.
          *  Wait.
-         */
-        Thread.sleep(250);
-      }
-      catch (InterruptedException e)
-      {
-        Log.printStackTrace(e);
-      }
-      while (line.getFramePosition() < nBytesWritten)
-      {
-        Log.println(false,"PlaybackThread.play() Line still active... pausing a bit.  Position:" + line.getFramePosition());
-        try
-        {
-          Thread.sleep(100);
-        }
-        catch (InterruptedException e)
-        {
-          Log.printStackTrace(e);
-        }
-      }
-      Log.println(false, "PlaybackThread.play() Done playing.");
-      /*
+                 */
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                Log.printStackTrace(e);
+            }
+            while (line.getFramePosition() < nBytesWritten) {
+                Log.println(false, "PlaybackThread.play() Line still active... pausing a bit.  Position:" + line.getFramePosition());
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Log.printStackTrace(e);
+                }
+            }
+            Log.println(false, "PlaybackThread.play() Done playing.");
+            /*
        * All data are played. We can close up shop.
-       */
-      line.close();
-      if ((_parent != null) && (_shouldRun))
-      {
-        endTime = System.currentTimeMillis();
-        diffMillis = (endTime - startTime) / 1000;
-        _parent.setSecondaryText(Messages.getString("CommsThread.22") + " in " + diffMillis + " seconds.");
-        Log.println(true, "Text file sent in " + ((endTime - startTime) / 1000) + " seconds.");
-        Log.println(false, "PlaybackThread.play() exit.");
-      }
+             */
+            line.close();
+            if ((_parent != null) && (_shouldRun)) {
+                endTime = System.currentTimeMillis();
+                diffMillis = (endTime - startTime) / 1000;
+                _parent.setSecondaryText(Messages.getString("CommsThread.22") + " in " + diffMillis + " seconds.");
+                Log.println(true, "Text file sent in " + ((endTime - startTime) / 1000) + " seconds.");
+                Log.println(false, "PlaybackThread.play() exit.");
+            }
+        }
     }
-  }
 }

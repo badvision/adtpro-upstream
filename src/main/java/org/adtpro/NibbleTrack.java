@@ -17,16 +17,14 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package org.adtpro;
 
-public class NibbleTrack
-{
-  public NibbleTrack()
-  {
-    trackBuffer = new byte[6656];
-  }
-  public double accuracy = 0.0;
-  public int foundLength = 0;
-  public byte[] trackBuffer;
+public class NibbleTrack {
+
+    public NibbleTrack() {
+        trackBuffer = new byte[6656];
+    }
+    public double accuracy = 0.0;
+    public int foundLength = 0;
+    public byte[] trackBuffer;
 }
