@@ -22,7 +22,6 @@ package org.adtpro;
 import java.io.*;
 import java.util.Calendar;
 
-import org.adtpro.resources.Messages;
 import org.adtpro.transport.ATransport;
 import org.adtpro.transport.AudioTransport;
 import org.adtpro.transport.ProtocolVersionException;

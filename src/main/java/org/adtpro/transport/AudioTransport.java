@@ -24,7 +24,7 @@ package org.adtpro.transport;
 
 import org.adtpro.ADTProperties;
 import org.adtpro.gui.Gui;
-import org.adtpro.resources.Messages;
+import org.adtpro.Messages;
 import org.adtpro.transport.audio.BytesToWav;
 import org.adtpro.transport.audio.CaptureThread;
 import org.adtpro.transport.audio.PlaybackThread;

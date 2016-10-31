@@ -37,7 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
-import org.adtpro.resources.Messages;
+import org.adtpro.Messages;
 import org.adtpro.transport.SerialTransport;
 import org.adtpro.utilities.Log;
 import org.adtpro.ADTProperties;

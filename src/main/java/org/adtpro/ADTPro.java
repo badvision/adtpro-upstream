@@ -20,7 +20,6 @@
 package org.adtpro;
 
 import org.adtpro.gui.Gui;
-import org.adtpro.resources.Messages;
 import org.adtpro.utilities.Log;
 
 /**

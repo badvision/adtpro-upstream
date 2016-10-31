@@ -35,7 +35,7 @@ import java.util.Arrays;
 
 import javax.swing.*;
 
-import org.adtpro.resources.Messages;
+import org.adtpro.Messages;
 import org.adtpro.transport.ATransport;
 import org.adtpro.transport.AudioTransport;
 import org.adtpro.transport.SerialTransport;

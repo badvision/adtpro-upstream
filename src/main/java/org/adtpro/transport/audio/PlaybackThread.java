@@ -25,7 +25,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
 import org.adtpro.gui.Gui;
-import org.adtpro.resources.Messages;
+import org.adtpro.Messages;
 import org.adtpro.utilities.Log;
 
 public class PlaybackThread extends Thread {

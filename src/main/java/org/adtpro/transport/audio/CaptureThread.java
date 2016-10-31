@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import javax.sound.sampled.*;
 
-import org.adtpro.resources.Messages;
+import org.adtpro.Messages;
 import org.adtpro.utilities.Log;
 
 // Inner class to capture audio data

@@ -30,7 +30,7 @@ import java.io.*;
 import java.util.*;
 
 import org.adtpro.gui.Gui;
-import org.adtpro.resources.Messages;
+import org.adtpro.Messages;
 import org.adtpro.utilities.Log;
 import org.adtpro.utilities.StringUtilities;
 import org.adtpro.utilities.UnsignedByte;

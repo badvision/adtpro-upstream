@@ -24,7 +24,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.Date;
-import org.adtpro.resources.Messages;
+import org.adtpro.Messages;
 
 public class Log {
 
