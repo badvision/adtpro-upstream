@@ -100,5 +100,10 @@
             <artifactId>rxtx</artifactId>
             <version>2.1.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.xerial.thirdparty</groupId>
+            <artifactId>nestedvm</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>
