@@ -1,4 +1,3 @@
- Error reading included file Templates/javafx/Templates/Licenses/license-gpl2.txt
 package org.adtpro.gui;
 
 import java.net.URL;
