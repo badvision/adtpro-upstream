@@ -1,6 +1,6 @@
 ;
 ; ADTPro - Apple Disk Transfer ProDOS
-; Copyright (C) 2012 - 2016 by David Schmidt
+; Copyright (C) 2015 by David Schmidt
 ; david__schmidt at users.sourceforge.net
 ;
 ; This program is free software; you can redistribute it and/or modify it 
@@ -17,21 +17,18 @@
 ; with this program; if not, write to the Free Software Foundation, Inc., 
 ; 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ;
-; Virtual drive over the serial port based on ideas by Terence J. Boldt
+; Based on ideas from Terence J. Boldt
 
-	.include "prodos/prodosmacros.i"		; OS macros
-	.include "prodos/prodosconst.i"			; OS equates, characters, etc.
+w5100_ptr  := $06         ; 2 byte pointer value
+w5100_sha  := $08         ; 2 byte physical addr shadow ($F000-$FFFF)
+w5100_adv  := $EB         ; 2 byte pointer register advancement
+w5100_len  := $ED         ; 2 byte frame length
+w5100_tmp  := $FA         ; 1 byte temporary value
+w5100_bas  := $FB         ; 1 byte socket 1 Base Address (hibyte)
 
-	.include "prodos/serial/drive/vsdriveinstall_low.asm"
-	.include "prodos/serial/drive/quit.asm"
-	.include "prodos/serial/findslot.asm"
+; Hardware addresses of w5100 - $C0xy, where x is slot number + 8
+w5100_mode := $C0B4
+w5100_addr := $C0B5
+w5100_data := $C0B7
 
-asm_begin:
-.segment "DRIVER"
-.org $9600
-	.include "prodos/vdrive.asm"
-	.include "prodos/serial/drive/vsdrivemain.asm"
-	.include "prodos/serial/iigsscc.asm"
-	.include "prodos/serial/ssc.asm"
-	.include "prodos/serial/timer.asm"
-	
+w5100_ip_parms := $7000 ; w5100 driver load address

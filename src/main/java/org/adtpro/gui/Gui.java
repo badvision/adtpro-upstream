@@ -1,6 +1,6 @@
 /*
  * ADTPro - Apple Disk Transfer ProDOS
- * Copyright (C) 2006 - 2014 by David Schmidt
+ * Copyright (C) 2006 - 2016 by David Schmidt
  * david__schmidt at users.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it 
@@ -600,7 +600,7 @@ public final class Gui extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, aboutString, Messages.getString("Gui.About"), JOptionPane.INFORMATION_MESSAGE);
             } else if (e.getActionCommand().equals(Messages.getString("Gui.Website"))) //$NON-NLS-1$
             {
-                BareBonesBrowserLaunch.openURL("http://adtpro.sourceforge.net");
+                BareBonesBrowserLaunch.openURL("http://adtpro.com");
             } else if (e.getActionCommand().equals(Messages.getString("Gui.CD"))) //$NON-NLS-1$
             {
                 JFileChooser jc = new JFileChooser();

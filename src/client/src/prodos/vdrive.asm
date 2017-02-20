@@ -1,6 +1,6 @@
 ;
 ; ADTPro - Apple Disk Transfer ProDOS
-; Copyright (C) 2012 - 2013 by David Schmidt
+; Copyright (C) 2012 - 2013, 2016 by David Schmidt
 ; david__schmidt at users.sourceforge.net
 ;
 ; This program is free software; you can redistribute it and/or modify it 
@@ -42,9 +42,11 @@ DRIVER:
 	stx	STACKPTR	;   in case we need to beat a hasty retreat
 ; CHECK THAT WE HAVE THE RIGHT DRIVE
 	lda	UNIT
-	cmp	#$20		; SLOT 2 DRIVE 1
+FIXUP01:
+	cmp	#$00		; SLOT x DRIVE 1
 	beq	DOCMD1		; YEP, DO COMMAND
-	cmp	#$A0		; SLOT 2 DRIVE 2
+FIXUP02:
+	cmp	#$00		; SLOT x DRIVE 2
 	beq	DOCMD2		; YEP, DO COMMAND
 	sec	; NOPE, FAIL
 	lda	#NODEV

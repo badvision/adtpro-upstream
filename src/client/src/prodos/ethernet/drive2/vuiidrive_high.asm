@@ -17,19 +17,25 @@
 ; with this program; if not, write to the Free Software Foundation, Inc., 
 ; 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ;
-; Virtual drive over ethernet based on ideas by Terence J. Boldt
+; Virtual drive over Ethernet based on ideas by Terence J. Boldt
 
 	.include "prodos/prodosmacros.i"		; OS macros
 	.include "prodos/prodosconst.i"			; OS equates, characters, etc.
 	.include "ip65/inc/common.i"
+	.include "prodos/ethernet/drive2/w5100const.i"
 
-.segment "INSTALL"
-	.include "prodos/ethernet/drive/vedriveinstall.asm"
+.segment "INSTALLER"
+.org $2000
+	.include "prodos/ethernet/drive2/vuiidriveinstall_high.asm"
+	.include "prodos/ethernet/drive2/w5100init.asm"
+	.include "prodos/ethernet/drive2/initheavystack.asm"
+	.include "prodos/ethernet/drive2/vuiidrivevars.asm"
 
-asm_begin:
-.segment "CODE"
-.org $7600
+driver_reloc:
+.org $D000
+driver_begin:
 	.include "prodos/vdrive.asm"
-	.include "prodos/ethernet/drive/vedrivemain.asm"
-	.include "prodos/ethernet/drive/ethproto.asm"
-	.include "prodos/ethernet/uther.asm"
+	.include "prodos/ethernet/drive2/vuiidriveio.asm"
+	.include "prodos/ethernet/drive2/w5100io.asm"
+driver_end:
+; The rest of the IP65 lib will fall after this

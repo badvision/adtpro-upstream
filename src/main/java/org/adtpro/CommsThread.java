@@ -796,15 +796,16 @@ public class CommsThread extends Thread {
                         } else {
                             _vdisks.writeBlock(1, block, buffer);
                         }
-                        _transport.writeByte(0xc5); // Reflect the 'E'
-                        _transport.writeByte(command);
-                        _transport.writeByte(blocklo);
-                        _transport.writeByte(blockhi);
-                        _transport.writeByte(checkReceived);
-                        _transport.pushBuffer();
                     } else {
                         Log.println(false, "Block checksums did not match.  Received: " + UnsignedByte.toString(checkReceived) + " calculated: " + UnsignedByte.toString(checksum(buffer, Disk.BLOCK_SIZE))); //$NON-NLS-1$
                     }
+                    // Protocol response
+                    _transport.writeByte(0xc5); // Reflect the 'E'
+                    _transport.writeByte(command);
+                    _transport.writeByte(blocklo);
+                    _transport.writeByte(blockhi);
+                    _transport.writeByte(checkReceived);
+                    _transport.pushBuffer();
                 }
             } else {
                 Log.println(false, "Envelope checksums did not match.");
@@ -1104,7 +1105,7 @@ public class CommsThread extends Thread {
                         Log.println(false, "CommsThread.receiveDisk() length: " + (length * 512) + " Disk.APPLE_140KB_DISK: " + Disk.APPLE_140KB_DISK);
                         if ((length * 512) == Disk.APPLE_140KB_DISK) {
                             // We know images will always be coming from the server in ProDOS order, so construct our disk that way
-                            Disk disk = new Disk(name);
+                            Disk disk = new Disk(name, true);
                             // Force any 5-1/4" disk order to DOS
                             disk.makeDosOrder();
                             disk.save();
@@ -1291,7 +1292,7 @@ public class CommsThread extends Thread {
                         // We know images will always be coming from the
                         // server in ProDOS order, so construct our disk
                         // that way
-                        Disk disk = new Disk(name);
+                        Disk disk = new Disk(name, true);
                         // Force any 5-1/4" disk order to DOS
                         disk.makeDosOrder();
                         disk.save();
@@ -3578,7 +3579,7 @@ public class CommsThread extends Thread {
     }
 
     /*
-	 * public void setProtocolCompatibility(boolean state) { _client01xCompatibleProtocol = state; }
+     * public void setProtocolCompatibility(boolean state) { _client01xCompatibleProtocol = state; }
      */
     public String getInstructions(String guiString, int size, int speed) {
         return (_transport.getInstructions(guiString, size, speed));
